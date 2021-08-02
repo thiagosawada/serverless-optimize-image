@@ -17,5 +17,20 @@ provider:
         - "arn:aws:s3:::*" # Acesso a todos os buckets do S3
 
 functions:
-  hello:
-    handler: handler.hello
+  optimize:
+    handler: optimize.handle
+    environment:
+      bucket: node-serverless-tms
+    events:
+      - s3:
+          bucket: node-serverless-tms
+          event: s3:ObjectCreated:* # * não interessa a forma como o upload é feito
+          rules:
+            - prefix: uploads/
+            - suffix: .jpg
+      - s3:
+          bucket: node-serverless-tms
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploads/
+            - suffix: .png
